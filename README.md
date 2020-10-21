@@ -88,4 +88,8 @@ Fork this repo and send us a pull request when you think you are done. We will n
 
 Just create a new issue in this repo and we will respond and get back to you quickly.
 
+> What's the best way to send my project?
+
+Please send us clear instructions to run your project: like a Docker (compose) commands and a gently Postman project to test your endpoints.  
+
 **Original test written by [Akita](https://t.co/W47ODZTOAc)**
