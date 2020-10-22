@@ -1,0 +1,14 @@
+br/dev/rafaelnoleto/survivors/model/entity/SurvivorEntity.class
+br/dev/rafaelnoleto/survivors/model/dao/SurvivorDao.class
+br/dev/rafaelnoleto/survivors/resources/SurvivorResource.class
+br/dev/rafaelnoleto/survivors/utils/Utils.class
+br/dev/rafaelnoleto/survivors/model/service/Service.class
+br/dev/rafaelnoleto/survivors/model/entity/SurvivorItemEntity.class
+br/dev/rafaelnoleto/survivors/model/service/ItemService.class
+br/dev/rafaelnoleto/survivors/model/entity/Entity.class
+br/dev/rafaelnoleto/survivors/model/dao/ItemDao.class
+br/dev/rafaelnoleto/survivors/model/entity/ItemEntity.class
+br/dev/rafaelnoleto/survivors/model/service/SurvivorService.class
+br/dev/rafaelnoleto/survivors/resources/ItemResource.class
+br/dev/rafaelnoleto/survivors/model/entity/SurvivorNotificationEntity.class
+br/dev/rafaelnoleto/survivors/JAXRSConfiguration.class
