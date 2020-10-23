@@ -7,6 +7,7 @@ import br.dev.rafaelnoleto.survivors.model.dao.SurvivorNotificationDao;
 import br.dev.rafaelnoleto.survivors.model.entity.SurvivorEntity;
 import br.dev.rafaelnoleto.survivors.model.entity.SurvivorItemEntity;
 import br.dev.rafaelnoleto.survivors.model.entity.SurvivorNotificationEntity;
+import br.dev.rafaelnoleto.survivors.model.entity.SurvivorNotifiedEntity;
 import br.dev.rafaelnoleto.survivors.utils.Utils;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -137,7 +138,7 @@ public class SurvivorService implements Service {
 
     @Override
     public LinkedHashMap<String, Object> parseResponseData(Object object) {
-        SurvivorEntity survivorEntity = (SurvivorEntity) object;
+        SurvivorNotifiedEntity survivorEntity = (SurvivorNotifiedEntity) object;
         LinkedHashMap<String, Object> dataObject = new LinkedHashMap<>();
         dataObject.put("id", survivorEntity.getId());
         dataObject.put("name", survivorEntity.getName());
@@ -145,6 +146,7 @@ public class SurvivorService implements Service {
         dataObject.put("gender", survivorEntity.getGender());
         dataObject.put("latitude", survivorEntity.getLatitude());
         dataObject.put("longitude", survivorEntity.getLongitude());
+        dataObject.put("infected", survivorEntity.getInfected());
 
         if (survivorEntity.getItems() != null) {
             dataObject.put("items", survivorEntity.getItems());

@@ -1,6 +1,7 @@
 package br.dev.rafaelnoleto.survivors.model.dao;
 
 import br.dev.rafaelnoleto.survivors.model.entity.SurvivorEntity;
+import br.dev.rafaelnoleto.survivors.model.entity.SurvivorNotifiedEntity;
 import br.dev.rafaelnoleto.survivors.utils.Utils;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -44,8 +45,12 @@ public class SurvivorDao implements Dao<SurvivorEntity> {
 
     @Override
     public SurvivorEntity readOne(Integer id) {
-        String sql = "select id, name, age, gender, latitude, longitude from survivor where id = ?;";
-        SurvivorEntity survivor = null;
+        String sql = "select s.id, s.name, s.age, s.gender, s.latitude, s.longitude,(count(sn.survivor_id) >= 3) as infected "
+                    + "from survivor s "
+                    + "left join survivor_notification sn on sn.survivor_id = s.id "
+                    + "where s.id = ? "
+                    + "group by s.id;";
+        SurvivorNotifiedEntity survivor = null;
         
         try (
             Connection con = Utils.getConnection();
@@ -55,13 +60,14 @@ public class SurvivorDao implements Dao<SurvivorEntity> {
             ResultSet rs = ps.executeQuery();
             
             if (rs.next()) {
-                survivor = new SurvivorEntity();
+                survivor = new SurvivorNotifiedEntity();
                 survivor.setId(rs.getInt(1));
                 survivor.setName(rs.getString(2));
                 survivor.setAge(rs.getInt(3));
                 survivor.setGender(rs.getInt(4));
                 survivor.setLatitude(rs.getDouble(5));
                 survivor.setLongitude(rs.getDouble(6));
+                survivor.setInfected(rs.getBoolean(7));
             }
         } catch (Exception ex) {
             System.out.println(ex);
@@ -72,8 +78,12 @@ public class SurvivorDao implements Dao<SurvivorEntity> {
 
     @Override
     public List<SurvivorEntity> readAll() {
-        String sql = "select id, name, age, gender, latitude, longitude from survivor;";
+        String sql = "select s.id, s.name, s.age, s.gender, s.latitude, s.longitude,(count(sn.survivor_id) >= 3) as infected "
+                    + "from survivor s "
+                    + "left join survivor_notification sn on sn.survivor_id = s.id "
+                    + "group by s.id;";
         List<SurvivorEntity> survivors = new ArrayList<>();
+        
         
         try (
             Connection con = Utils.getConnection();
@@ -81,15 +91,16 @@ public class SurvivorDao implements Dao<SurvivorEntity> {
         ) {
             ResultSet rs = ps.executeQuery();
             
-            SurvivorEntity survivorEntity;
+            SurvivorNotifiedEntity survivorEntity;
             while (rs.next()) {
-                survivorEntity = new SurvivorEntity();
+                survivorEntity = new SurvivorNotifiedEntity();
                 survivorEntity.setId(rs.getInt(1));
                 survivorEntity.setName(rs.getString(2));
                 survivorEntity.setAge(rs.getInt(3));
                 survivorEntity.setGender(rs.getInt(4));
                 survivorEntity.setLatitude(rs.getDouble(5));
                 survivorEntity.setLongitude(rs.getDouble(6));
+                survivorEntity.setInfected(rs.getBoolean(7));
                 survivors.add(survivorEntity);
             }
         } catch (Exception ex) {
