@@ -1,6 +1,7 @@
 package br.dev.rafaelnoleto.survivors.model.entity;
 
-import java.util.HashMap;
+import br.dev.rafaelnoleto.survivors.utils.Utils;
+import java.util.LinkedHashMap;
 
 /**
  *
@@ -8,11 +9,15 @@ import java.util.HashMap;
  */
 public class SurvivorEntity extends Entity {
 
-    public SurvivorEntity(HashMap<String, Object> data) {
-        super((int) data.get("id"));
+    public SurvivorEntity() {
+        super();
+    }
+
+    public SurvivorEntity(LinkedHashMap<String, Object> data) {
+        super(Utils.parseInt(data.get("id")));
         this.name = (String) data.get("name");
-        this.age = (int) data.get("age");
-        this.gender = (int) data.get("gender");
+        this.age = Utils.parseInt(data.get("age"));
+        this.gender = Utils.parseInt(data.get("gender"));
         this.latitude = (Double) data.get("latitude");
         this.longitude = (Double) data.get("logitude");
     }

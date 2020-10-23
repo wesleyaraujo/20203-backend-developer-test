@@ -1,7 +1,7 @@
 package br.dev.rafaelnoleto.survivors.resources;
 
 import br.dev.rafaelnoleto.survivors.model.service.SurvivorService;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -21,7 +21,7 @@ public class SurvivorResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response post(HashMap<String, Object> data) {
+    public Response post(LinkedHashMap<String, Object> data) {
         return Response.ok(data).build();
     }
     
@@ -49,7 +49,7 @@ public class SurvivorResource {
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response put(@PathParam("id") Integer id, HashMap<String, Object> data) {
+    public Response put(@PathParam("id") Integer id, LinkedHashMap<String, Object> data) {
         return Response.ok(data).build();
     }
     
@@ -57,7 +57,7 @@ public class SurvivorResource {
     @Path("/change")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response putExchange(HashMap<String, Object> data) {
+    public Response putExchange(LinkedHashMap<String, Object> data) {
         return Response.ok(data).build();
     }
 

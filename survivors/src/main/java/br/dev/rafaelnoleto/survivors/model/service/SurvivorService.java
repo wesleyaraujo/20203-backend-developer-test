@@ -1,6 +1,6 @@
 package br.dev.rafaelnoleto.survivors.model.service;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -10,17 +10,17 @@ import java.util.List;
 public class SurvivorService implements Service {
 
     @Override
-    public List validate(HashMap data) {
+    public List validate(LinkedHashMap<String, Object> data) {
         return null;
     }
 
     @Override
-    public Object parseRequestData(HashMap data) {
+    public Object parseRequestData(LinkedHashMap<String, Object> data) {
         return null;
     }
 
     @Override
-    public HashMap parseResponseData(Object object) {
+    public LinkedHashMap<String, Object> parseResponseData(Object object) {
         return null;
     }
 

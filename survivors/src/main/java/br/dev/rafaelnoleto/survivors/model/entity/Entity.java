@@ -6,6 +6,8 @@ package br.dev.rafaelnoleto.survivors.model.entity;
  */
 public abstract class Entity {
 
+    public Entity() {}
+    
     public Entity(Integer id) {
         this.id = id;
     }

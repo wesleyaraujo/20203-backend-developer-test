@@ -4,6 +4,7 @@
 /home/rafaelnoleto/Programas/20203-backend-developer-test/survivors/src/main/java/br/dev/rafaelnoleto/survivors/model/entity/SurvivorEntity.java
 /home/rafaelnoleto/Programas/20203-backend-developer-test/survivors/src/main/java/br/dev/rafaelnoleto/survivors/model/entity/Entity.java
 /home/rafaelnoleto/Programas/20203-backend-developer-test/survivors/src/main/java/br/dev/rafaelnoleto/survivors/resources/ItemResource.java
+/home/rafaelnoleto/Programas/20203-backend-developer-test/survivors/src/main/java/br/dev/rafaelnoleto/survivors/model/dao/Dao.java
 /home/rafaelnoleto/Programas/20203-backend-developer-test/survivors/src/main/java/br/dev/rafaelnoleto/survivors/model/entity/ItemEntity.java
 /home/rafaelnoleto/Programas/20203-backend-developer-test/survivors/src/main/java/br/dev/rafaelnoleto/survivors/resources/SurvivorResource.java
 /home/rafaelnoleto/Programas/20203-backend-developer-test/survivors/src/main/java/br/dev/rafaelnoleto/survivors/model/entity/SurvivorNotificationEntity.java
