@@ -1,4 +1,5 @@
 /home/rafaelnoleto/Programas/20203-backend-developer-test/survivors/src/main/java/br/dev/rafaelnoleto/survivors/utils/Utils.java
+/home/rafaelnoleto/Programas/20203-backend-developer-test/survivors/src/main/java/br/dev/rafaelnoleto/survivors/model/dao/SurvivorNotificationDao.java
 /home/rafaelnoleto/Programas/20203-backend-developer-test/survivors/src/main/java/br/dev/rafaelnoleto/survivors/model/service/ItemService.java
 /home/rafaelnoleto/Programas/20203-backend-developer-test/survivors/src/main/java/br/dev/rafaelnoleto/survivors/model/service/SurvivorService.java
 /home/rafaelnoleto/Programas/20203-backend-developer-test/survivors/src/main/java/br/dev/rafaelnoleto/survivors/model/entity/SurvivorEntity.java

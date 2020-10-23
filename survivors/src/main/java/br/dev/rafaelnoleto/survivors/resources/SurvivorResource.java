@@ -34,6 +34,21 @@ public class SurvivorResource {
 
         return Utils.response(Utils.parseIdResponse(id));
     }
+    
+    @POST
+    @Path("/{survivorId}/{survivorNotifierId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response postNotification(@PathParam("survivorId") Integer survivorId, @PathParam("survivorNotifierId") Integer survivorNotifierId) {
+        List<String> errors = this.service.validateCreateNotification(survivorId, survivorNotifierId);
+
+        if (!errors.isEmpty()) {
+            return Utils.responseError(errors);
+        }
+
+        final Integer idNotification = this.service.createNotification(survivorId, survivorNotifierId);
+
+        return Utils.response(Utils.parseIdResponse(idNotification));
+    }
 
     @GET
     @Path("/{id}")

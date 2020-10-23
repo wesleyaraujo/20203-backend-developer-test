@@ -9,6 +9,7 @@ br/dev/rafaelnoleto/survivors/model/entity/SurvivorItemEntity.class
 br/dev/rafaelnoleto/survivors/model/dao/Dao.class
 br/dev/rafaelnoleto/survivors/model/service/ItemService.class
 br/dev/rafaelnoleto/survivors/model/entity/Entity.class
+br/dev/rafaelnoleto/survivors/model/dao/SurvivorNotificationDao.class
 br/dev/rafaelnoleto/survivors/model/dao/ItemDao.class
 br/dev/rafaelnoleto/survivors/model/entity/ItemEntity.class
 br/dev/rafaelnoleto/survivors/model/service/SurvivorService.class

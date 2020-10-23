@@ -15,7 +15,7 @@ import java.util.List;
 public class SurvivorItemDao implements Dao<SurvivorItemEntity> {
 
     @Override
-    public Integer create(SurvivorItemEntity SurvivorItemEntity) {
+    public Integer create(SurvivorItemEntity survivorItemEntity) {
         String sql = "insert into survivor_item (survivor_id, item_id, quantidade) values(?, ?, ?);";
         Integer id = null;
         
@@ -23,9 +23,9 @@ public class SurvivorItemDao implements Dao<SurvivorItemEntity> {
             Connection con = Utils.getConnection();
             PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
         ) {
-            ps.setObject(1, SurvivorItemEntity.getSurvivorId());
-            ps.setObject(2, SurvivorItemEntity.getItemId());
-            ps.setObject(3, SurvivorItemEntity.getQuantidade());
+            ps.setObject(1, survivorItemEntity.getSurvivorId());
+            ps.setObject(2, survivorItemEntity.getItemId());
+            ps.setObject(3, survivorItemEntity.getQuantidade());
             ps.executeUpdate();
             
             ResultSet rs = ps.getGeneratedKeys();

@@ -3,8 +3,10 @@ package br.dev.rafaelnoleto.survivors.model.service;
 import br.dev.rafaelnoleto.survivors.model.dao.ItemDao;
 import br.dev.rafaelnoleto.survivors.model.dao.SurvivorDao;
 import br.dev.rafaelnoleto.survivors.model.dao.SurvivorItemDao;
+import br.dev.rafaelnoleto.survivors.model.dao.SurvivorNotificationDao;
 import br.dev.rafaelnoleto.survivors.model.entity.SurvivorEntity;
 import br.dev.rafaelnoleto.survivors.model.entity.SurvivorItemEntity;
+import br.dev.rafaelnoleto.survivors.model.entity.SurvivorNotificationEntity;
 import br.dev.rafaelnoleto.survivors.utils.Utils;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,6 +23,7 @@ public class SurvivorService implements Service {
 
     final SurvivorDao survivorDao = new SurvivorDao();
     final SurvivorItemDao survivorItemDao = new SurvivorItemDao();
+    final SurvivorNotificationDao survivorNotificationDao = new SurvivorNotificationDao();
     final ItemDao itemDao = new ItemDao();
 
     private void validateLocation(List<String> errors, LinkedHashMap<String, Object> data) {
@@ -85,8 +88,26 @@ public class SurvivorService implements Service {
 
         this.validateLocation(errors, data);
 
-        if (!this.survivorDao.existsById(id)) {
+        if (!this.survivorDao.existsById(Utils.parseInt(id))) {
             errors.add("Id '" + id + "' não encontrado.");
+        }
+
+        return errors;
+    }
+
+    public List validateCreateNotification(Integer survivorId, Integer survivorNotifierId) {
+        List<String> errors = new ArrayList<>();
+
+        if (survivorId.equals(survivorNotifierId)) {
+            errors.add("Survivor (survivorId) e Notifier (survivorNotifierId) devem ser diferentes.");
+        }
+
+        if (!this.survivorDao.existsById(Utils.parseInt(survivorId))) {
+            errors.add("Id '" + survivorId + "' não encontrado.");
+        }
+
+        if (!this.survivorDao.existsById(Utils.parseInt(survivorNotifierId))) {
+            errors.add("Id '" + survivorNotifierId + "' do notificador não encontrado.");
         }
 
         return errors;
@@ -142,6 +163,13 @@ public class SurvivorService implements Service {
         });
 
         return id;
+    }
+    
+    public Integer createNotification(Integer survivorId, Integer survivorNotifierId) {
+        SurvivorNotificationEntity survivorNotificationEntity = new SurvivorNotificationEntity(survivorId, survivorNotifierId);
+        Integer idNotification = this.survivorNotificationDao.create(survivorNotificationEntity);
+
+        return idNotification;
     }
 
     public Boolean updateLocation(Integer id, LinkedHashMap<String, Object> data) {
