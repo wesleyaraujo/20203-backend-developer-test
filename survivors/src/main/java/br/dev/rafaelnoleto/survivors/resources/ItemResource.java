@@ -8,6 +8,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -36,6 +37,14 @@ public class ItemResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAll() {
         List<LinkedHashMap<String, Object>> data = this.service.readAll();
+        return Utils.response(data);
+    }
+    
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getOne(@PathParam("id") Integer id) {
+        LinkedHashMap<String, Object> data = this.service.readOne(id);
         return Utils.response(data);
     }
 

@@ -41,7 +41,27 @@ public class ItemDao implements Dao<ItemEntity> {
 
     @Override
     public ItemEntity readOne(Integer id) {
-        return null;
+        String sql = "select id, description, points from item where id = ?;";
+        ItemEntity survivor = null;
+        
+        try (
+            Connection con = Utils.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+        ) {
+            ps.setObject(1, id);
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                survivor = new ItemEntity();
+                survivor.setId(rs.getInt(1));
+                survivor.setDescription(rs.getString(2));
+                survivor.setPoints(rs.getInt(3));
+            }
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        
+        return survivor;
     }
 
     @Override

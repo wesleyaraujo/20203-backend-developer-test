@@ -64,5 +64,16 @@ public class ItemService implements Service {
         
         return items;
     }
+    
+    public LinkedHashMap<String, Object> readOne(Integer id) {
+        ItemEntity itemEntity = this.itemDao.readOne(id);
+        LinkedHashMap<String, Object> item = null;
+
+        if (itemEntity != null) {
+            item = this.parseResponseData(itemEntity);
+        }
+
+        return item;
+    }
 
 }
