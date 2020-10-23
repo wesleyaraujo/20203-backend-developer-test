@@ -10,7 +10,7 @@ public interface Dao<T> {
 
     public Integer create(T t);
 
-    public T readOne();
+    public T readOne(Integer id);
 
     public List<T> readAll();
 

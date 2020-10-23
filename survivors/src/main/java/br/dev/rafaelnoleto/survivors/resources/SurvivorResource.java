@@ -39,13 +39,15 @@ public class SurvivorResource {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getOne(@PathParam("id") Integer id) {
-        return Response.ok("GetOneSurvivor").build();
+        LinkedHashMap<String, Object> data = this.service.readOne(id);
+        return Utils.response(data);
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAll() {
-        return Response.ok("GetAllSurvivors").build();
+        List<LinkedHashMap<String, Object>> data = this.service.readAll();
+        return Utils.response(data);
     }
 
     @GET

@@ -40,7 +40,7 @@ public class ItemDao implements Dao<ItemEntity> {
     }
 
     @Override
-    public ItemEntity readOne() {
+    public ItemEntity readOne(Integer id) {
         return null;
     }
 

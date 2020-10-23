@@ -96,20 +96,55 @@ public class SurvivorService implements Service {
 
     @Override
     public LinkedHashMap<String, Object> parseResponseData(Object object) {
-        return null;
+        SurvivorEntity survivorEntity = (SurvivorEntity) object;
+        LinkedHashMap<String, Object> dataObject = new LinkedHashMap<>();
+        dataObject.put("id", survivorEntity.getId());
+        dataObject.put("name", survivorEntity.getName());
+        dataObject.put("age", survivorEntity.getAge());
+        dataObject.put("gender", survivorEntity.getGender());
+        dataObject.put("latitude", survivorEntity.getLatitude());
+        dataObject.put("longitude", survivorEntity.getLongitude());
+
+        if (survivorEntity.getItems() != null) {
+            dataObject.put("items", survivorEntity.getItems());
+        }
+
+        return dataObject;
     }
 
     public Integer create(LinkedHashMap<String, Object> data) {
         SurvivorEntity survivorEntity = this.parseRequestData(data);
         Integer id = this.survivorDao.create(survivorEntity);
-        
+
         survivorEntity.getItems().forEach(survivorItemEntity -> {
             survivorItemEntity.setSurvivorId(id);
-            Integer idItem = this.survivorItemDao.create(survivorItemEntity);
-            survivorItemEntity.setId(idItem);
+            this.survivorItemDao.create(survivorItemEntity);
         });
-        
+
         return id;
+    }
+
+    public List<LinkedHashMap<String, Object>> readAll() {
+        List<LinkedHashMap<String, Object>> survivors = new ArrayList<>();
+
+        this.survivorDao.readAll().forEach(survivor -> {
+            survivor.setItems(null);
+            survivors.add(this.parseResponseData(survivor));
+        });
+
+        return survivors;
+    }
+
+    public LinkedHashMap<String, Object> readOne(Integer id) {
+        SurvivorEntity survivorEntity = this.survivorDao.readOne(id);
+        LinkedHashMap<String, Object> survivor = null;
+
+        if (survivorEntity != null) {
+            survivorEntity.setItems(this.survivorItemDao.readAllBySurvivor(id));
+            survivor = this.parseResponseData(survivorEntity);
+        }
+
+        return survivor;
     }
 
 }

@@ -5,6 +5,7 @@ import br.dev.rafaelnoleto.survivors.utils.Utils;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,13 +41,39 @@ public class SurvivorItemDao implements Dao<SurvivorItemEntity> {
     }
 
     @Override
-    public SurvivorItemEntity readOne() {
+    public SurvivorItemEntity readOne(Integer id) {
         return null;
     }
 
     @Override
     public List<SurvivorItemEntity> readAll() {
         return null;
+    }
+    
+    public List<SurvivorItemEntity> readAllBySurvivor(Integer survivorId) {
+        String sql = "select i.id, si.quantidade from item i " +
+                        "inner join survivor_item si on si.item_id = i.id and si.survivor_id = ?";
+        List<SurvivorItemEntity> items = new ArrayList<>();
+        
+        try (
+            Connection con = Utils.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+        ) {
+            ps.setObject(1, survivorId);
+            ResultSet rs = ps.executeQuery();
+            
+            SurvivorItemEntity survivorItemEntity;
+            while (rs.next()) {
+                survivorItemEntity = new SurvivorItemEntity();
+                survivorItemEntity.setId(rs.getInt(1));
+                survivorItemEntity.setQuantidade(rs.getInt(2));
+                items.add(survivorItemEntity);
+            }
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        
+        return items;
     }
 
     @Override
