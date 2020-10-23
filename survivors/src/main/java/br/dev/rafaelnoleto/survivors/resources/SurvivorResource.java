@@ -65,13 +65,6 @@ public class SurvivorResource {
         return Utils.response(data);
     }
 
-    @GET
-    @Path("/report")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getReportData() {
-        return Response.ok("GetReportData").build();
-    }
-
     @PUT
     @Path("/{id}/location")
     @Consumes(MediaType.APPLICATION_JSON)
