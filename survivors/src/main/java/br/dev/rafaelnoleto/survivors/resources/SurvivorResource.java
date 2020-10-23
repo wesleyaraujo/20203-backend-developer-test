@@ -34,7 +34,7 @@ public class SurvivorResource {
 
         return Utils.response(Utils.parseIdResponse(id));
     }
-    
+
     @POST
     @Path("/{survivorId}/{survivorNotifierId}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -93,7 +93,15 @@ public class SurvivorResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response putExchange(LinkedHashMap<String, Object> data) {
-        return Response.ok(data).build();
+        List<String> errors = this.service.validateExchange(data);
+
+        if (!errors.isEmpty()) {
+            return Utils.responseError(errors);
+        }
+
+        this.service.executeExchange(data);
+
+        return Utils.response(Status.OK);
     }
 
 }

@@ -11,6 +11,7 @@ import br.dev.rafaelnoleto.survivors.model.entity.SurvivorNotifiedEntity;
 import br.dev.rafaelnoleto.survivors.utils.Utils;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -111,7 +112,63 @@ public class SurvivorService implements Service {
             errors.add("Id '" + survivorNotifierId + "' do notificador não encontrado.");
         }
 
+        if (this.survivorNotificationDao.existsBySurvivorIdAndSurvivorNotifierId(Utils.parseInt(survivorId), Utils.parseInt(survivorNotifierId))) {
+            errors.add("Esta notificação já existe.");
+        }
+
         return errors;
+    }
+
+    public List validateExchange(LinkedHashMap<String, Object> data) {
+        List<String> errors = new ArrayList<>();
+
+        if (data.get("survivor1") == null || data.get("survivor2") == null) {
+            errors.add("O survivor1 e survivor2 devem ser informados.");
+        } else {
+            HashMap<String, Object> survivor1 = (HashMap<String, Object>) data.get("survivor1");
+            HashMap<String, Object> survivor2 = (HashMap<String, Object>) data.get("survivor2");
+
+            Integer points1 = this.validateExchangeSurvivor(errors, survivor1, "survivor1");
+            Integer points2 = this.validateExchangeSurvivor(errors, survivor2, "survivor2");
+
+            if (!points1.equals(points2)) {
+                errors.add("Troca inviável, os pontos dos itens são diferentes - survivor1: " + points1 + ", suvivor2: " + points2);
+            }
+        }
+
+        return errors;
+    }
+
+    private Integer validateExchangeSurvivor(List<String> errors, HashMap<String, Object> survivor, String survivorName) {
+        Integer itemsPoints = 0;
+
+        if (!this.survivorDao.existsById(Utils.parseInt(survivor.get("id")))) {
+            errors.add("Id '" + survivor.get("id") + "' do " + survivorName + " não encontrado.");
+        }
+
+        if ((survivor.get("items") instanceof Collection) && !((List<Map>) survivor.get("items")).isEmpty()) {
+            List<Map> items = (List<Map>) survivor.get("items");
+            for (Map item : items) {
+                if (Utils.parseInt(item.get("quantidade")) == 0 || Utils.parseInt(item.get("quantidade")) == null) {
+                    errors.add("A quantidade do item '" + item.get("id") + "' do " + survivorName + " deve ser informada e deve ser maior que 0.");
+                }
+
+                if (!this.itemDao.existsById(Utils.parseInt(item.get("id")))) {
+                    errors.add("Id '" + item.get("id") + "' do item não encontrado.");
+                } else {
+                    Map<String, Object> existsPoints = this.survivorItemDao.existsByIdSurvivorAndIdItemAndQuantidade(Utils.parseInt(survivor.get("id")), Utils.parseInt(item.get("id")), Utils.parseInt(item.get("quantidade")));
+                    if (!((Boolean) existsPoints.get("exists"))) {
+                        errors.add("O item '" + item.get("id") + "' não está suscetível a troca, verifique se o " + survivorName + " possui este item e a quantidade que está tentando trocar.");
+                    } else {
+                        itemsPoints += ((Integer) existsPoints.get("points") * Utils.parseInt(item.get("quantidade")));
+                    }
+                }
+            }
+        } else {
+            errors.add("Items do " + survivorName + " não foram informados ou são inválidos.");
+        }
+
+        return itemsPoints;
     }
 
     @Override
@@ -166,7 +223,7 @@ public class SurvivorService implements Service {
 
         return id;
     }
-    
+
     public Integer createNotification(Integer survivorId, Integer survivorNotifierId) {
         SurvivorNotificationEntity survivorNotificationEntity = new SurvivorNotificationEntity(survivorId, survivorNotifierId);
         Integer idNotification = this.survivorNotificationDao.create(survivorNotificationEntity);
@@ -177,6 +234,35 @@ public class SurvivorService implements Service {
     public Boolean updateLocation(Integer id, LinkedHashMap<String, Object> data) {
         SurvivorEntity survivorEntity = this.parseRequestData(data);
         return this.survivorDao.update(id, survivorEntity);
+    }
+
+    public void executeExchange(LinkedHashMap<String, Object> data) {
+        HashMap<String, Object> survivor1 = (HashMap<String, Object>) data.get("survivor1");
+        HashMap<String, Object> survivor2 = (HashMap<String, Object>) data.get("survivor2");
+        this.executeExchangeSurvivor(Utils.parseInt(survivor2.get("id")), survivor1);
+        this.executeExchangeSurvivor(Utils.parseInt(survivor1.get("id")), survivor2);
+    }
+
+    private void executeExchangeSurvivor(Integer survivorReceiverId, HashMap<String, Object> survivor) {
+        List<Map> items = (List<Map>) survivor.get("items");
+
+        items.forEach(item -> {
+            SurvivorItemEntity survivorItemEntity = this.survivorItemDao.readByIdSurvivorAndIdItem(survivorReceiverId, Utils.parseInt(item.get("id")));
+
+            if (survivorItemEntity != null) {
+                survivorItemEntity.setQuantidade(survivorItemEntity.getQuantidade() + Utils.parseInt(item.get("quantidade")));
+                this.survivorItemDao.update(survivorItemEntity.getId(), survivorItemEntity);
+            } else {
+                survivorItemEntity = new SurvivorItemEntity();
+                survivorItemEntity.setSurvivorId(survivorReceiverId);
+                survivorItemEntity.setItemId(Utils.parseInt(item.get("id")));
+                survivorItemEntity.setQuantidade(Utils.parseInt(item.get("quantidade")));
+            }
+
+            survivorItemEntity = this.survivorItemDao.readByIdSurvivorAndIdItem(Utils.parseInt(survivor.get("id")), Utils.parseInt(item.get("id")));
+            survivorItemEntity.setQuantidade(survivorItemEntity.getQuantidade() - Utils.parseInt(item.get("quantidade")));
+            this.survivorItemDao.update(survivorItemEntity.getId(), survivorItemEntity);
+        });
     }
 
     public List<LinkedHashMap<String, Object>> readAll() {

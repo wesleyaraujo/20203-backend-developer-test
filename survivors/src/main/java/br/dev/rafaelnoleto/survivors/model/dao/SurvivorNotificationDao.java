@@ -45,17 +45,37 @@ public class SurvivorNotificationDao implements Dao<SurvivorNotificationEntity> 
 
     @Override
     public SurvivorNotificationEntity readOne(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return null;
     }
 
     @Override
     public List<SurvivorNotificationEntity> readAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return null;
     }
 
     @Override
     public Boolean update(Integer id, SurvivorNotificationEntity t) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return null;
     }
+    
+    public Boolean existsBySurvivorIdAndSurvivorNotifierId(Integer survivorId, Integer survivorNotifierId) {
+        Boolean exists = false;
+        String sql = "select id from survivor_notification where survivor_id = ? and survivor_notifier_id = ?;";
+
+        try (
+            Connection con = Utils.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+        ) {
+            ps.setObject(1, survivorId);
+            ps.setObject(2, survivorNotifierId);
+            ResultSet rs = ps.executeQuery();
+            exists = rs.next();
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        
+        return exists;
+    }
+    
 
 }

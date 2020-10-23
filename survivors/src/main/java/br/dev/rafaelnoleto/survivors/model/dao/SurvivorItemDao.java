@@ -6,7 +6,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -78,12 +80,82 @@ public class SurvivorItemDao implements Dao<SurvivorItemEntity> {
 
     @Override
     public Boolean update(Integer id, SurvivorItemEntity survivorItemEntity) {
-        return null;
+        String sql = "update survivor_item set quantidade = ? where id = ?;";
+        Boolean success = false;
+        
+        try (
+            Connection con = Utils.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+        ) {
+            ps.setObject(1, survivorItemEntity.getQuantidade());
+            ps.setObject(2, id);
+            success = ps.executeUpdate() > 0;
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        
+        return success;
     }
 
     @Override
     public Boolean delete(Integer id) {
         return null;
+    }
+    
+    public SurvivorItemEntity readByIdSurvivorAndIdItem(Integer survivorId, Integer itemId) {
+        String sql = "select id, quantidade from survivor_item "
+                    + "where survivor_id = ? and item_id = ?;";
+        SurvivorItemEntity survivorItem = null;
+        
+        try (
+            Connection con = Utils.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+        ) {
+            ps.setObject(1, survivorId);
+            ps.setObject(2, itemId);
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                survivorItem = new SurvivorItemEntity();
+                survivorItem.setId(rs.getInt(1));
+                survivorItem.setQuantidade(rs.getInt(2));
+            }
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        
+        return survivorItem;
+    }
+    
+    public Map<String, Object> existsByIdSurvivorAndIdItemAndQuantidade(Integer survivorId, Integer itemId, Integer quantidade) {
+        Integer points = 0;
+        Boolean exists = false;
+        String sql = "select i.points from survivor_item si "
+                + "inner join item i on i.id = si.item_id "
+                + "where si.survivor_id = ? "
+                + "and si.item_id = ? "
+                + "and si.quantidade >= ?;";
+
+        try (
+            Connection con = Utils.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+        ) {
+            ps.setObject(1, survivorId);
+            ps.setObject(2, itemId);
+            ps.setObject(3, quantidade);
+            ResultSet rs = ps.executeQuery();
+            exists = rs.next();
+            if (exists) {
+                points = rs.getInt(1);
+            }
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        
+        Map<String, Object> map = new HashMap<>();
+        map.put("points", points);
+        map.put("exists", exists);
+        return map;
     }
 
 }

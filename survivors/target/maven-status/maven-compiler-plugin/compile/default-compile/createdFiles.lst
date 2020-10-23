@@ -1,5 +1,6 @@
 br/dev/rafaelnoleto/survivors/model/dao/SurvivorItemDao.class
 br/dev/rafaelnoleto/survivors/model/entity/SurvivorEntity.class
+br/dev/rafaelnoleto/survivors/model/entity/SurvivorNotifiedEntity.class
 br/dev/rafaelnoleto/survivors/model/dao/SurvivorDao.class
 br/dev/rafaelnoleto/survivors/resources/SurvivorResource.class
 br/dev/rafaelnoleto/survivors/utils/Utils.class
