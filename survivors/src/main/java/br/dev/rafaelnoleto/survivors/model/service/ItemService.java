@@ -6,6 +6,7 @@ import br.dev.rafaelnoleto.survivors.utils.Utils;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import javax.inject.Inject;
 
 /**
  *
@@ -13,7 +14,8 @@ import java.util.List;
  */
 public class ItemService implements Service {
 
-    final ItemDao itemDao = new ItemDao();
+    @Inject
+    private ItemDao itemDao;
 
     @Override
     public List validate(LinkedHashMap data) {

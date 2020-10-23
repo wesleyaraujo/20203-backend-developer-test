@@ -4,6 +4,7 @@ import br.dev.rafaelnoleto.survivors.model.service.ItemService;
 import br.dev.rafaelnoleto.survivors.utils.Utils;
 import java.util.LinkedHashMap;
 import java.util.List;
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -16,7 +17,8 @@ import javax.ws.rs.core.Response;
 @Path("items")
 public class ItemResource {
 
-    private final ItemService service = new ItemService();
+    @Inject
+    private ItemService service;
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)

@@ -16,6 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
+import javax.inject.Inject;
 
 /**
  *
@@ -23,10 +24,14 @@ import java.util.stream.Stream;
  */
 public class SurvivorService implements Service {
 
-    final SurvivorDao survivorDao = new SurvivorDao();
-    final SurvivorItemDao survivorItemDao = new SurvivorItemDao();
-    final SurvivorNotificationDao survivorNotificationDao = new SurvivorNotificationDao();
-    final ItemDao itemDao = new ItemDao();
+    @Inject
+    private SurvivorDao survivorDao;
+    @Inject
+    private SurvivorItemDao survivorItemDao;
+    @Inject
+    private SurvivorNotificationDao survivorNotificationDao;
+    @Inject
+    private ItemDao itemDao;
 
     private void validateLocation(List<String> errors, LinkedHashMap<String, Object> data) {
         Double latitude = Utils.parseDouble(data.get("latitude"));
