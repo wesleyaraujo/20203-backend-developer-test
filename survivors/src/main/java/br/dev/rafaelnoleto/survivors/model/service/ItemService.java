@@ -23,9 +23,9 @@ public class ItemService implements Service {
             errors.add("O campo 'description' deve ser informado e deve ter no máximo 100 caracteres.");
         }
 
-        Integer x = Utils.parseInt(data.get("points"));
-        if (x != null && (x > 10 || x < 0)) {
-            errors.add("O campo 'points' deve ter no mínimo 0 e no máximo 10.");
+        Integer points = Utils.parseInt(data.get("points"));
+        if ((points != null && (points > 10 || points < 0)) || points == null && data.get("points") != null) {
+            errors.add("O campo 'points' deve ter no mínimo 0 e no máximo 10 e deve ser um valor inteiro.");
         }
 
         return errors;
@@ -33,6 +33,8 @@ public class ItemService implements Service {
 
     @Override
     public ItemEntity parseRequestData(LinkedHashMap<String, Object> data) {
+        Integer points = Utils.parseInt(data.get("points"));
+        data.put("points", (points != null) ? points : 0);
         return new ItemEntity(data);
     }
 

@@ -74,5 +74,17 @@ public class Utils {
 
         return x;
     }
+    
+    public static Double parseDouble(Object value) {
+        Double x;
+
+        try {
+            x = Double.parseDouble(value.toString());
+        } catch (Exception e) {
+            x = null;
+        }
+
+        return x;
+    }
 
 }

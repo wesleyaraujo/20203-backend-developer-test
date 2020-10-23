@@ -1,13 +1,19 @@
 package br.dev.rafaelnoleto.survivors.model.entity;
 
 import br.dev.rafaelnoleto.survivors.utils.Utils;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  *
  * @author rafaelnoleto
  */
 public class SurvivorEntity extends Entity {
+
+    public static Integer GENDER_ANOTHER = 0;
+    public static Integer GENDER_WOMAN = 1;
+    public static Integer GENDER_MAN = 2;
 
     public SurvivorEntity() {
         super();
@@ -18,8 +24,8 @@ public class SurvivorEntity extends Entity {
         this.name = (String) data.get("name");
         this.age = Utils.parseInt(data.get("age"));
         this.gender = Utils.parseInt(data.get("gender"));
-        this.latitude = (Double) data.get("latitude");
-        this.longitude = (Double) data.get("logitude");
+        this.latitude = Utils.parseDouble(data.get("latitude"));
+        this.longitude = Utils.parseDouble(data.get("longitude"));
     }
 
     private String name;
@@ -27,6 +33,7 @@ public class SurvivorEntity extends Entity {
     private Integer gender;
     private Double latitude;
     private Double longitude;
+    private List<SurvivorItemEntity> items = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -66,6 +73,14 @@ public class SurvivorEntity extends Entity {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+
+    public List<SurvivorItemEntity> getItems() {
+        return items;
+    }
+
+    public void setItems(List<SurvivorItemEntity> items) {
+        this.items = items;
     }
 
 }

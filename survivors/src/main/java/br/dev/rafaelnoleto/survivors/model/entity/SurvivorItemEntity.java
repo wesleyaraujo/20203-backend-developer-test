@@ -17,10 +17,12 @@ public class SurvivorItemEntity extends Entity {
         super(Utils.parseInt(data.get("id")));
         this.survivorId = Utils.parseInt(data.get("survivorId"));
         this.itemId = Utils.parseInt(data.get("itemId"));
+        this.quantidade = Utils.parseInt(data.get("quantidade"));
     }
 
     private Integer survivorId;
     private Integer itemId;
+    private Integer quantidade;
 
     public Integer getSurvivorId() {
         return survivorId;
@@ -36,6 +38,14 @@ public class SurvivorItemEntity extends Entity {
 
     public void setItemId(Integer itemId) {
         this.itemId = itemId;
+    }
+
+    public Integer getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(Integer quantidade) {
+        this.quantidade = quantidade;
     }
 
 }

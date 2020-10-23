@@ -79,5 +79,23 @@ public class ItemDao implements Dao<ItemEntity> {
     public Boolean delete(Integer id) {
         return null;
     }
+    
+    public Boolean existsById(Integer id) {
+        Boolean exists = false;
+        String sql = "select id from item where id = ?;";
+
+        try (
+            Connection con = Utils.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+        ) {
+            ps.setObject(1, id);
+            ResultSet rs = ps.executeQuery();
+            exists = rs.next();
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        
+        return exists;
+    }
 
 }
