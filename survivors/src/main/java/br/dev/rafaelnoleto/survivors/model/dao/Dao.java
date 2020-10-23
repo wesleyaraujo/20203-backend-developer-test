@@ -14,7 +14,7 @@ public interface Dao<T> {
 
     public List<T> readAll();
 
-    public Boolean update(Integer id);
+    public Boolean update(Integer id, T t);
 
     public Boolean delete(Integer id);
 }

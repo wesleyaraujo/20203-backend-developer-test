@@ -23,6 +23,37 @@ public class SurvivorService implements Service {
     final SurvivorItemDao survivorItemDao = new SurvivorItemDao();
     final ItemDao itemDao = new ItemDao();
 
+    private void validateLocation(List<String> errors, LinkedHashMap<String, Object> data) {
+        Double latitude = Utils.parseDouble(data.get("latitude"));
+        if (latitude == null && data.get("latitude") != null) {
+            errors.add("O campo 'latitude' deve ser um número real.");
+        }
+
+        Double longitude = Utils.parseDouble(data.get("longitude"));
+        if (longitude == null && data.get("longitude") != null) {
+            errors.add("O campo 'longitude' deve ser um número real.");
+        }
+    }
+
+    private void validateItems(List<String> errors, LinkedHashMap<String, Object> data) {
+        if (data.get("items") instanceof Collection) {
+            List<Map> maps = (List<Map>) data.get("items");
+            maps.forEach(item -> {
+                if (Utils.parseInt(item.get("quantidade")) == null && item.get("quantidade") != null) {
+                    errors.add("A quantidade de algum dos seus itens não foi informada como número inteiro.");
+                }
+
+                if (item.get("id") == null) {
+                    errors.add("Id do item não informado.");
+                } else if ((Utils.parseInt(item.get("id")) == null && item.get("id") != null)) {
+                    errors.add("Id '" + item.get("id") + "' do item não é um inteiro válido.");
+                } else if (!this.itemDao.existsById(Utils.parseInt(item.get("id")))) {
+                    errors.add("Id '" + item.get("id") + "' do item não encontrado.");
+                }
+            });
+        }
+    }
+
     @Override
     public List validate(LinkedHashMap<String, Object> data) {
         List<String> errors = new ArrayList<>();
@@ -42,31 +73,20 @@ public class SurvivorService implements Service {
             errors.add("O campo 'gender' deve ter um destes valores: 0, 1 ou 2.");
         }
 
-        Double latitude = Utils.parseDouble(data.get("latitude"));
-        if (latitude == null && data.get("latitude") != null) {
-            errors.add("O campo 'latitude' deve ser um número real.");
-        }
+        this.validateLocation(errors, data);
 
-        Double longitude = Utils.parseDouble(data.get("longitude"));
-        if (longitude == null && data.get("longitude") != null) {
-            errors.add("O campo 'longitude' deve ser um número real.");
-        }
+        this.validateItems(errors, data);
 
-        if (data.get("items") instanceof Collection) {
-            List<Map> maps = (List<Map>) data.get("items");
-            maps.forEach(item -> {
-                if (Utils.parseInt(item.get("quantidade")) == null && item.get("quantidade") != null) {
-                    errors.add("A quantidade de algum dos seus itens não foi informada como número inteiro.");
-                }
+        return errors;
+    }
 
-                if (item.get("id") == null) {
-                    errors.add("Id do item não informado.");
-                } else if ((Utils.parseInt(item.get("id")) == null && item.get("id") != null)) {
-                    errors.add("Id '" + item.get("id") + "' do item não é um inteiro válido.");
-                } else if (!this.itemDao.existsById(Utils.parseInt(item.get("id")))) {
-                    errors.add("Id '" + item.get("id") + "' do item não encontrado.");
-                }
-            });
+    public List validateUpdateLocation(Integer id, LinkedHashMap<String, Object> data) {
+        List<String> errors = new ArrayList<>();
+
+        this.validateLocation(errors, data);
+
+        if (!this.survivorDao.existsById(id)) {
+            errors.add("Id '" + id + "' não encontrado.");
         }
 
         return errors;
@@ -122,6 +142,11 @@ public class SurvivorService implements Service {
         });
 
         return id;
+    }
+
+    public Boolean updateLocation(Integer id, LinkedHashMap<String, Object> data) {
+        SurvivorEntity survivorEntity = this.parseRequestData(data);
+        return this.survivorDao.update(id, survivorEntity);
     }
 
     public List<LinkedHashMap<String, Object>> readAll() {

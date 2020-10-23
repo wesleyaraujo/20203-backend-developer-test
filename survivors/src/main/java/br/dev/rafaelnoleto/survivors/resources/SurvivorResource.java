@@ -8,12 +8,12 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.PATCH;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 @Path("survivors")
 public class SurvivorResource {
@@ -58,15 +58,23 @@ public class SurvivorResource {
     }
 
     @PUT
-    @Path("/{id}")
+    @Path("/{id}/location")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response put(@PathParam("id") Integer id, LinkedHashMap<String, Object> data) {
-        return Response.ok(data).build();
+    public Response putLocation(@PathParam("id") Integer id, LinkedHashMap<String, Object> data) {
+        List<String> errors = this.service.validateUpdateLocation(id, data);
+
+        if (!errors.isEmpty()) {
+            return Utils.responseError(errors);
+        }
+
+        this.service.updateLocation(id, data);
+
+        return Utils.response(Status.OK);
     }
 
-    @PATCH
-    @Path("/change")
+    @PUT
+    @Path("/exchange")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response putExchange(LinkedHashMap<String, Object> data) {

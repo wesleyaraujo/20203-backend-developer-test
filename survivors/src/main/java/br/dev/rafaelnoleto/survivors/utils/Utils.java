@@ -33,6 +33,10 @@ public class Utils {
         return Utils.response(responseError, Status.BAD_REQUEST);
     }
 
+    public static Response response(Status status) {
+        return Response.status(status).entity(null).build();
+    }
+    
     public static Response response(LinkedHashMap<String, Object> data) {
         return Utils.response(data, Status.OK);
     }

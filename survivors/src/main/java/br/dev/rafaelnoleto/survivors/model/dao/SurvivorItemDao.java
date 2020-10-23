@@ -77,7 +77,7 @@ public class SurvivorItemDao implements Dao<SurvivorItemEntity> {
     }
 
     @Override
-    public Boolean update(Integer id) {
+    public Boolean update(Integer id, SurvivorItemEntity survivorItemEntity) {
         return null;
     }
 

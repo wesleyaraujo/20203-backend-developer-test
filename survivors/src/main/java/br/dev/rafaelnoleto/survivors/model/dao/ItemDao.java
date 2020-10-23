@@ -71,7 +71,7 @@ public class ItemDao implements Dao<ItemEntity> {
     }
 
     @Override
-    public Boolean update(Integer id) {
+    public Boolean update(Integer id, ItemEntity itemEntity) {
         return null;
     }
 

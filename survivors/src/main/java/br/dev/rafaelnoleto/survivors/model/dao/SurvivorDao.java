@@ -100,13 +100,46 @@ public class SurvivorDao implements Dao<SurvivorEntity> {
     }
 
     @Override
-    public Boolean update(Integer id) {
-        return null;
+    public Boolean update(Integer id, SurvivorEntity survivorEntity) {
+        String sql = "update survivor set latitude = ?, longitude = ? where id = ?;";
+        Boolean success = false;
+        
+        try (
+            Connection con = Utils.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+        ) {
+            ps.setObject(1, survivorEntity.getLatitude());
+            ps.setObject(2, survivorEntity.getLongitude());
+            ps.setObject(3, id);
+            success = ps.executeUpdate() > 0;
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        
+        return success;
     }
 
     @Override
     public Boolean delete(Integer id) {
         return null;
+    }
+    
+    public Boolean existsById(Integer id) {
+        Boolean exists = false;
+        String sql = "select id from survivor where id = ?;";
+
+        try (
+            Connection con = Utils.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+        ) {
+            ps.setObject(1, id);
+            ResultSet rs = ps.executeQuery();
+            exists = rs.next();
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        
+        return exists;
     }
 
 }
