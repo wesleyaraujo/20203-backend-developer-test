@@ -142,8 +142,11 @@ public class SurvivorService implements Service {
     private Integer validateExchangeSurvivor(List<String> errors, HashMap<String, Object> survivor, String survivorName) {
         Integer itemsPoints = 0;
 
-        if (!this.survivorDao.existsById(Utils.parseInt(survivor.get("id")))) {
+        SurvivorNotifiedEntity survivorEntity = (SurvivorNotifiedEntity) this.survivorDao.readOne(Utils.parseInt(survivor.get("id")));
+        if (survivorEntity == null) {
             errors.add("Id '" + survivor.get("id") + "' do " + survivorName + " não encontrado.");
+        } else if (survivorEntity.getInfected()) {
+            errors.add("O '" + survivorName + " está infectado.");
         }
 
         if ((survivor.get("items") instanceof Collection) && !((List<Map>) survivor.get("items")).isEmpty()) {
