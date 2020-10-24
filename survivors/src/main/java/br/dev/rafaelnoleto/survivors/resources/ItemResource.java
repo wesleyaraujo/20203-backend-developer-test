@@ -13,6 +13,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 @Path("items")
 public class ItemResource {
@@ -32,7 +33,7 @@ public class ItemResource {
 
         final Integer id = this.service.create(data);
 
-        return Utils.response(Utils.parseIdResponse(id));
+        return Utils.response(Utils.parseIdResponse(id), Status.CREATED);
     }
 
     @GET

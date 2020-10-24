@@ -34,7 +34,7 @@ public class SurvivorResource {
 
         final Integer id = this.service.create(data);
 
-        return Utils.response(Utils.parseIdResponse(id));
+        return Utils.response(Utils.parseIdResponse(id), Status.CREATED);
     }
 
     @POST
@@ -49,7 +49,7 @@ public class SurvivorResource {
 
         final Integer idNotification = this.service.createNotification(survivorId, survivorNotifierId);
 
-        return Utils.response(Utils.parseIdResponse(idNotification));
+        return Utils.response(Utils.parseIdResponse(idNotification), Status.CREATED);
     }
 
     @GET
