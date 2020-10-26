@@ -70,7 +70,7 @@ In order to accomplish this, the API must fulfill the following use cases:
 
 ## Notes
 
-1. Please use one of the following languages/frameworks: *Java 8+ (EJB, JSF, Primefaces, JBoss)*.
+1. Please use one of the following languages/frameworks: *Java 8+ (EJB, JBoss). If you want to code some View, please use JSF, Primefaces*.
 2. No authentication is needed (it's a zombie apocalypse, no one will try to hack a system while running from a horde of zombies);
 3. We still care about proper programming and architecture techniques, you must showcase that you're worthy of surving the zombie apocalypse through the sheer strength of your skills;
 4. Don't forget to make at least a minimal documentation of the API endpoints and how to use them;
