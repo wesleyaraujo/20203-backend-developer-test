@@ -1,9 +1,11 @@
 package br.com.zssn.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -11,6 +13,9 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
@@ -54,6 +59,10 @@ public class Survivor {
 
 	@Enumerated(EnumType.STRING)
 	private Gender gender;
+
+	@OneToMany(cascade = CascadeType.PERSIST)
+	@JoinTable(name = "resouces_survivor", joinColumns = @JoinColumn(name = "survivor_id"))
+	private List<ResourcesSurvivor> resources;
 
 	@JsonProperty("created_at")
 	private LocalDateTime createdAt;
