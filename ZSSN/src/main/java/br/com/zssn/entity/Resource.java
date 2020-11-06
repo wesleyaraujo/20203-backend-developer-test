@@ -1,5 +1,6 @@
 package br.com.zssn.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -29,6 +30,9 @@ public class Resource {
 	@GeneratedValue(generator = "resouces_id_generator")
 	private Long id;
 
-	private String nome;
-	private Double value;
+	@Column(nullable = false)
+	private String name;
+
+	@Column(nullable = false)
+	private Double point;
 }
