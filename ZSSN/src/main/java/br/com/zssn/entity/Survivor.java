@@ -13,8 +13,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -60,8 +58,7 @@ public class Survivor {
 	@Enumerated(EnumType.STRING)
 	private Gender gender;
 
-	@OneToMany(cascade = CascadeType.PERSIST)
-	@JoinTable(name = "resouces_survivor", joinColumns = @JoinColumn(name = "survivor_id"))
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<ResourcesSurvivor> resources;
 
 	@JsonProperty("created_at")
