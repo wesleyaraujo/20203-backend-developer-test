@@ -39,4 +39,8 @@ public class ResourcesSurvivor {
 	@Column(nullable = false)
 	private Integer quantity;
 
+	@ManyToOne
+	@JoinColumn(name = "survivor_id")
+	private Survivor survivor;
+
 }
