@@ -1,0 +1,144 @@
+{
+	"info": {
+		"_postman_id": "e5046db7-6ae4-4107-9329-036adb67b0a4",
+		"name": "ZSSN",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"Myllena\",\n    \"birthdate\":\"1993-04-16T00:00:00\",\n    \"lastPosition\": {\n        \"latitude\":-5.08921,\n        \"longitude\":-42.8016\n    },\n    \"gender\":\"M\", \n    \"resources\":[\n    {\n        \"resource\":{\"id\":2},\n        \"quantity\":2\n    },\n    {\n        \"resource\":{\"id\":3},\n        \"quantity\":4\n    },\n    {\n        \"resource\":{\"id\":4},\n        \"quantity\":2\n    }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/survivors/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"survivors",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateLocation",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/survivors/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"survivors",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "informInfected",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/survivors/infected/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"survivors",
+						"infected",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "tradeResources",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"tradeFrom\":{\r\n        \"survivorId\":1,\r\n        \"items\":[{\r\n            \"resource\":{\"id\":2},\r\n            \"quantity\":2\r\n        }\r\n        ]\r\n    },\r\n    \"tradeTo\":{\r\n        \"survivorId\":-47,\r\n        \"items\":[{\r\n            \"resource\":{\"id\":4},\r\n            \"quantity\":6\r\n        }\r\n        ]\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/survivors/trade",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"survivors",
+						"trade"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "reportInfected",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/survivors/report/infected",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"survivors",
+						"report",
+						"infected"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
