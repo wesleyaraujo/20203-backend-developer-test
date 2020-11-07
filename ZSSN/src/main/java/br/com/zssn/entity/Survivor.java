@@ -58,8 +58,14 @@ public class Survivor {
 	@Enumerated(EnumType.STRING)
 	private Gender gender;
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "survivor", cascade = CascadeType.ALL)
 	private List<ResourcesSurvivor> resources;
+
+	@JsonProperty("count_infected")
+	private Integer countInfected;
+
+	@JsonProperty("infected")
+	private boolean infected;
 
 	@JsonProperty("created_at")
 	private LocalDateTime createdAt;
