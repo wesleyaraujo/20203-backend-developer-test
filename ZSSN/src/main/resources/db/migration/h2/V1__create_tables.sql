@@ -1,4 +1,4 @@
-create sequence user_id_seq start with 10 increment by 50;
+create sequence user_id_seq start with 1 increment by 1;
 
 create table users (
     id bigint default user_id_seq.nextval,
@@ -10,7 +10,7 @@ create table users (
     UNIQUE KEY user_email_unique (email)
 );
 
-create sequence survivor_id_seq start with 10 increment by 50;
+create sequence survivor_id_seq start with 1 increment by 1;
 
 create table survivors (
 	id bigint DEFAULT survivor_id_seq.nextval,
@@ -19,12 +19,14 @@ create table survivors (
 	last_latitude float(9),
 	last_longitude float(9),
 	gender varchar(1),
+	count_infected numeric(1),
+	infected numeric(1),
 	created_at timestamp,
     updated_at timestamp,
 	primary key (id)
 );
 
-create sequence resources_id_seq start with 10 increment by 50;
+create sequence resources_id_seq start with 1 increment by 1;
 
 create table resources (
 	id bigint DEFAULT resources_id_seq.nextval,
