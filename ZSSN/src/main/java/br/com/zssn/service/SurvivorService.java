@@ -1,9 +1,13 @@
 package br.com.zssn.service;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,6 +46,9 @@ public class SurvivorService {
 
 	@Autowired
 	private ResourcesSurvivorRepository resourcesSurvivorRepository;
+
+	@Autowired
+	protected EntityManager em;
 
 	public ResultOperation createSurvivor(Survivor survivor) {
 		try {
@@ -134,11 +141,33 @@ public class SurvivorService {
 		ResultOperation result = new ResultOperation();
 		Survivor survivorFromDB = survivorRepository.findById(survivorFrom.getSurvivorId()).map(s -> s).orElse(null);
 		Survivor survivorToDB = survivorRepository.findById(survivorTo.getSurvivorId()).map(s -> s).orElse(null);
-		if (validateSurvivorIsInfected(survivorFromDB) || validateSurvivorIsInfected(survivorToDB)) {
+
+		if (Objects.isNull(survivorFromDB)) {
 			result.setStatus(HttpStatus.BAD_REQUEST);
-			result.setMessage("Alguem esta infectado e não pode fazer troca de recursos.");
+			result.setMessage(String.format("Sobrevivente %s não entrado.", survivorFrom.getSurvivorId()));
 			return result;
 		}
+
+		if (Objects.isNull(survivorToDB)) {
+			result.setStatus(HttpStatus.BAD_REQUEST);
+			result.setMessage(String.format("Sobrevivente %s não entrado.", survivorTo.getSurvivorId()));
+			return result;
+		}
+
+		if (validateSurvivorIsInfected(survivorFromDB)) {
+			result.setStatus(HttpStatus.BAD_REQUEST);
+			result.setMessage(String.format("Sobrevivente %s esta infectado e não pode realizar trocas.",
+					survivorFromDB.getId()));
+			return result;
+		}
+
+		if (validateSurvivorIsInfected(survivorToDB)) {
+			result.setStatus(HttpStatus.BAD_REQUEST);
+			result.setMessage(
+					String.format("Sobrevivente %s esta infectado e não pode realizar trocas.", survivorToDB.getId()));
+			return result;
+		}
+
 		survivorFrom.getItems().stream().forEach(i -> {
 			i.setResource(resourceRepository.findById(i.getResource().getId()).map(r -> r).orElse(null));
 		});
@@ -227,7 +256,53 @@ public class SurvivorService {
 	}
 
 	private boolean validateSurvivorIsInfected(Survivor survivor) {
-		return survivor.isInfected();
+		return Objects.nonNull(survivor.isInfected()) ? survivor.isInfected() : false;
+	}
+
+	@SuppressWarnings("unchecked")
+	public ResultOperation reportInfected() {
+		try {
+			String sql = "SELECT s.infected, COUNT(s) FROM Survivor s GROUP BY s.infected ";
+			Query query = em.createQuery(sql);
+			List<Object[]> resultQuery = query.getResultList();
+
+			Double totalSurvivors = 0D;
+			Double totalInfecteds = 0D;
+			Double totalNonInfecteds = 0D;
+			if (!CollectionUtils.isEmpty(resultQuery)) {
+				for (Object[] tuple : resultQuery) {
+					Long quantity = (Long) tuple[1];
+					if ((Boolean) tuple[0] == true) {
+						totalInfecteds = quantity.doubleValue();
+					} else {
+						totalNonInfecteds = quantity.doubleValue();
+					}
+					totalSurvivors += quantity;
+				}
+			}
+
+			Double percInfecteds = ((totalInfecteds / totalSurvivors) * 100);
+			Double percNonInfecteds = ((totalNonInfecteds / totalSurvivors) * 100);
+
+			DecimalFormat format = new DecimalFormat("##.00");
+			StringBuilder message = new StringBuilder("Total de sobreviventes: ").append(totalSurvivors.intValue());
+			message.append(", sendo ").append(totalInfecteds.intValue()).append(" infectado(s)");
+			message.append(" e ").append(totalNonInfecteds.intValue()).append(" não infectado(s). ");
+			message.append(format.format(percInfecteds)).append("% infectados, ");
+			message.append(format.format(percNonInfecteds)).append("% não infectados.");
+
+			ResultOperation result = new ResultOperation();
+			result.setStatus(HttpStatus.OK);
+			result.setMessage(message.toString());
+			return result;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			ResultOperation result = new ResultOperation();
+			result.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+			result.setMessage(MESSAGE_ERROR);
+			return result;
+		}
 	}
 
 }
