@@ -34,5 +34,5 @@ public class Resource {
 	private String name;
 
 	@Column(nullable = false)
-	private Double point;
+	private Integer point;
 }
