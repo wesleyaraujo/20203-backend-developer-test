@@ -1,15 +1,3 @@
-create sequence user_id_seq start with 1 increment by 1;
-
-create table users (
-    id bigint default user_id_seq.nextval,
-    email varchar(255) not null,
-    name varchar(255) not null,
-    created_at timestamp,
-    updated_at timestamp,
-    primary key (id),
-    UNIQUE KEY user_email_unique (email)
-);
-
 create sequence survivor_id_seq start with 1 increment by 1;
 
 create table survivors (
@@ -20,7 +8,7 @@ create table survivors (
 	last_longitude float(9),
 	gender varchar(1),
 	count_infected numeric(1),
-	infected numeric(1),
+	infected boolean default false,
 	created_at timestamp,
     updated_at timestamp,
 	primary key (id)
@@ -33,4 +21,16 @@ create table resources (
 	name varchar(255) not null,
 	point float(2) not null,
 	primary key (id)
+);
+
+create sequence resouces_survivor_id_seq start with 1 increment by 1;
+
+CREATE TABLE public.resouces_survivor (
+	id bigint DEFAULT resouces_survivor_id_seq.nextval NOT NULL,
+	quantity int4 NOT NULL,
+	resource_id int8 NULL,
+	survivor_id int8 NULL,
+	CONSTRAINT resouces_survivor_pkey PRIMARY KEY (id),
+	CONSTRAINT fksei1p2ifllkdt8avg4v12pm86 FOREIGN KEY (resource_id) REFERENCES resources(id),
+	CONSTRAINT resouces_survivor_fk FOREIGN KEY (survivor_id) REFERENCES survivors(id)
 );
